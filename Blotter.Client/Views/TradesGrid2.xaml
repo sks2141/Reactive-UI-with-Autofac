@@ -1,0 +1,77 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             x:Class="Blotter.Client.Views.TradesGrid2"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <dxg:GridControl 
+            AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" 
+            ItemsSource="{Binding}">
+            
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn Header="Customer" FieldName="Customer" ReadOnly="True" SortOrder="None"/>
+                <dxg:GridColumn Header="Currency Pair" FieldName="CurrencyPair" ReadOnly="True"/>
+                <dxg:GridColumn Header="Amount" FieldName="Amount" ReadOnly="True" TextBlock.TextAlignment="Right" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}"/>
+                    <!--<dxg:GridColumn.CellStyle>
+                        <Style TargetType="dxg:LightweightCellEditor">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </dxg:GridColumn.CellStyle>
+                </dxg:GridColumn>
+                <dxg:GridColumn Header="Trade Price" FieldName="TradePrice" ReadOnly="True" TextBlock.TextAlignment="Right" Binding="{Binding DataContext.TradePrice, Mode=OneWay}" />-->
+                <dxg:GridColumn Header="Trade Price" FieldName="TradePrice" ReadOnly="True" TextBlock.TextAlignment="Right"/>
+                
+                <!--https://www.devexpress.com/Support/Center/Question/Details/Q445295/dxgrid-does-not-update-cell
+                    When you use the FieldName approach, GridControl subscribes to the PropertyChanged events of all the objects that will be represented as rows. 
+                    If, in addition, GridControl handled the PropertyChanged event of nested objects, it would have to listen to all nested objects of all nested objects and so on, which would reduce performance significantly. 
+                    That's why modifications made to the nested objects aren't represented.
+
+                    DisplayMemberBinding, which uses the standard WPF/Silverlight binding mechanisms, subscribes to the PropertyChanged event directly, without taking into account parent or child objects. 
+                    Thus, notifications are processed. The only limitation that comes with the DisplayMemberBinding approach is that it doesn't fully support ICollectionView, so it is recommended to use usual collections. 
+                    All other features work just the same as with the FieldName approach.-->
+                <dxg:GridColumn Header="Market Price" ReadOnly="True" TextBlock.TextAlignment="Right" Binding="{Binding Path=MarketPrice, Mode=OneWay}" />
+                <dxg:GridColumn Header="% from Market" ReadOnly="True" TextBlock.TextAlignment="Right" Binding="{Binding Path=PercentFromMarket, Mode=TwoWay}" />
+                
+                <dxg:GridColumn Header="Status" FieldName="Status" ReadOnly="True"/>
+                <dxg:GridColumn Header="Created At" FieldName="Timestamp" ReadOnly="True" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=dd/MM/yyyy HH:mm:ss.fff, MaskUseAsDisplayFormat=True}" />
+            </dxg:GridControl.Columns>
+
+            <dxg:GridControl.Resources>
+                <SolidColorBrush x:Key="GridRowIsRecentBackground" Color="Orange" />
+                <SolidColorBrush x:Key="GridRowIsRecentForeground" Color="Navy"/>
+            </dxg:GridControl.Resources>
+
+            <dxg:GridControl.View>
+                <dxg:TableView 
+                    EnableImmediatePosting="True"
+                    AllowPerPixelScrolling="True" AutoWidth="True"
+                    ShowGroupPanel="True" AllowGrouping="True" ShowAutoFilterRow="True" ShowTotalSummary="True"
+                    AllowEditing="False">
+                    <dxg:TableView.RowStyle>
+                        <Style TargetType="dxg:RowControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Row.Recent}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GridRowIsRecentBackground}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource GridRowIsRecentForeground}"/>
+                                </DataTrigger>
+                                <!--<MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding DataContext.Recent}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource GridRowIsRecentBackground}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource GridRowIsRecentForeground}"/>
+                                </MultiDataTrigger>-->
+                            </Style.Triggers>
+                        </Style>
+                    </dxg:TableView.RowStyle>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
+</UserControl>

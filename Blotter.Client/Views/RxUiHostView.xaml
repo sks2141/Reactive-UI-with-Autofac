@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Blotter.Client.Views.RxUiHostView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:reactiveUi1="http://reactiveui.net" 
+             xmlns:views1="clr-namespace:Blotter.Client.Views" 
+             xmlns:client="clr-namespace:Blotter.Client"
+             mc:Ignorable="d" 
+             x:Name="ContentHolder"
+              d:DataContext="{d:DesignInstance views1:RxUiHostViewModel, IsDesignTimeCreatable=False}"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <reactiveUi1:ViewModelViewHost ViewModel="{Binding Content}"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"/>
+
+</UserControl>
